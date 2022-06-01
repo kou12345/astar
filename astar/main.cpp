@@ -5,6 +5,8 @@
 #include <vector>
 #include <math.h>
 
+using namespace std;
+
 const int MapWidth = 5;
 const int MapHeight = 5;
 const int Infinity = 100000;
@@ -53,7 +55,7 @@ struct Node
 	}
 
 	Cell Position;						// ノード座標
-	std::vector<Node*> AdjacentNodes;	// 隣接ノード(辺)
+	vector<Node*> AdjacentNodes;	// 隣接ノード(辺)
 	float HeuristicCost;				// ヒューリスティックコスト
 	float TotalCost;					// コスト(ヒューリスティックコスト込み)
 };
@@ -174,7 +176,7 @@ bool IsEqualCell(const Cell& a, const Cell& b)
 	return false;
 }
 
-EraseResult EraseNode(std::list<Node*>& list, Node* new_node, float new_cost)
+EraseResult EraseNode(list<Node*>& list, Node* new_node, float new_cost)
 {
 	// クローズリストチェック
 	for (auto itr = list.begin(); itr != list.end(); itr++)
@@ -199,17 +201,17 @@ EraseResult EraseNode(std::list<Node*>& list, Node* new_node, float new_cost)
 }
 
 // オープンリストに追加
-bool AddAdjacentNode(std::list<Node*>& open_list, std::list<Node*>& close_list, Node* adjacent_node, float cost)
+bool AddAdjacentNode(list<Node*>& open_list, list<Node*>& close_list, Node* adjacent_node, float cost)
 {
 	bool can_update = true;
 
-	std::list<Node*> node_list[] =
+	list<Node*> node_list[] =
 	{
 		close_list,
 		open_list
 	};
 
-	for (std::list<Node*>& list : node_list)
+	for (list<Node*>& list : node_list)
 	{
 		// リストに同じノードがあってリストの方のコストが高いなら削除
 		if (EraseNode(list, adjacent_node, cost) == EraseResult::CouldntErased)
@@ -229,8 +231,8 @@ bool AddAdjacentNode(std::list<Node*>& open_list, std::list<Node*>& close_list, 
 
 void AStar(Cell start, Cell goal)
 {
-	std::list<Node*> open_list;
-	std::list<Node*> close_list;
+	list<Node*> open_list;
+	list<Node*> close_list;
 
 	//const Node* start_node = &Map[start.Y][start.X];
 	const Node* goal_node = &Map[goal.Y][goal.X];
@@ -325,7 +327,7 @@ void AStar(Cell start, Cell goal)
 	}
 
 	// 経路復元
-	std::list<Cell> route_list;
+	list<Cell> route_list;
 
 	// ゴールセルから復元する
 	route_list.push_back(goal);
@@ -339,7 +341,7 @@ void AStar(Cell start, Cell goal)
 			// 復元した経路を表示
 			for (Cell& cell : route_list)
 			{
-				// 
+				// cell.X cell.Y の値でどこに進むかをしている
 				printf("x = %d y = %d\n", cell.X, cell.Y);
 			}
 			break;
@@ -361,6 +363,8 @@ void AStar(Cell start, Cell goal)
 
 	printf("探索回数 = %d\n", count);
 }
+
+
 
 int main()
 {
