@@ -11,15 +11,15 @@ const int MapWidth = 5;
 const int MapHeight = 5;
 const int Infinity = 100000;
 
-// íœŒ‹‰Ê
+// å‰Šé™¤çµæœ
 enum EraseResult
 {
-	NotFound,		// –¢”­Œ©
-	Erased,			// íœ
-	CouldntErased	// íœ‚Å‚«‚È‚¢
+	NotFound,		// æœªç™ºè¦‹
+	Erased,			// å‰Šé™¤
+	CouldntErased	// å‰Šé™¤ã§ããªã„
 };
 
-// Map‚Ìƒ}ƒX–Ú
+// Mapã®ãƒã‚¹ç›®
 struct Cell
 {
 	Cell() :
@@ -34,11 +34,11 @@ struct Cell
 		Y = y;
 	}
 
-	int X;		// —ñ
-	int Y;		// s
+	int X;		// åˆ—
+	int Y;		// è¡Œ
 };
 
-// ƒm[ƒh
+// ãƒãƒ¼ãƒ‰
 struct Node
 {
 	Node() :
@@ -54,13 +54,13 @@ struct Node
 		AdjacentNodes.clear();
 	}
 
-	Cell Position;						// ƒm[ƒhÀ•W
-	vector<Node*> AdjacentNodes;	// —×Úƒm[ƒh(•Ó)
-	float HeuristicCost;				// ƒqƒ…[ƒŠƒXƒeƒBƒbƒNƒRƒXƒg
-	float TotalCost;					// ƒRƒXƒg(ƒqƒ…[ƒŠƒXƒeƒBƒbƒNƒRƒXƒg‚İ)
+	Cell Position;						// ãƒãƒ¼ãƒ‰åº§æ¨™
+	vector<Node*> AdjacentNodes;	// éš£æ¥ãƒãƒ¼ãƒ‰(è¾º)
+	float HeuristicCost;				// ãƒ’ãƒ¥ãƒ¼ãƒªã‚¹ãƒ†ã‚£ãƒƒã‚¯ã‚³ã‚¹ãƒˆ
+	float TotalCost;					// ã‚³ã‚¹ãƒˆ(ãƒ’ãƒ¥ãƒ¼ãƒªã‚¹ãƒ†ã‚£ãƒƒã‚¯ã‚³ã‚¹ãƒˆè¾¼ã¿)
 };
 
-// ƒRƒXƒgƒe[ƒuƒ‹
+// ã‚³ã‚¹ãƒˆãƒ†ãƒ¼ãƒ–ãƒ«
 int CostTable[MapHeight][MapWidth] =
 {
 	//0  1  2  3  4
@@ -71,7 +71,7 @@ int CostTable[MapHeight][MapWidth] =
 	{ 0, 1, 1, 1, 1, }, // 4
 };
 
-//// Œo˜H–³‚µ
+//// çµŒè·¯ç„¡ã—
 //int Map[MapHeight][MapWidth] =
 //{
 //	//0  1  2  3  4 
@@ -83,10 +83,10 @@ int CostTable[MapHeight][MapWidth] =
 //};
 //
 
-// ƒOƒ‰ƒt
+// ã‚°ãƒ©ãƒ•
 Node Map[MapHeight][MapWidth];
 
-// ¸‡ƒ\[ƒg—pŠÖ”
+// æ˜‡é †ã‚½ãƒ¼ãƒˆç”¨é–¢æ•°
 bool Less(Node* a, Node* b)
 {
 	if (a->TotalCost < b->TotalCost)
@@ -97,7 +97,7 @@ bool Less(Node* a, Node* b)
 	return false;
 }
 
-// ƒZƒ‹”ÍˆÍƒ`ƒFƒbƒNŠÖ”
+// ã‚»ãƒ«ç¯„å›²ãƒã‚§ãƒƒã‚¯é–¢æ•°
 bool IsCellWithinTheRange(int x, int y)
 {
 	if (x >= 0 &&
@@ -111,7 +111,7 @@ bool IsCellWithinTheRange(int x, int y)
 	return false;
 }
 
-// ƒm[ƒh‚Ìì¬
+// ãƒãƒ¼ãƒ‰ã®ä½œæˆ
 void CreateMap()
 {
 	for (int y = 0; y < MapHeight; y++)
@@ -129,7 +129,7 @@ void CreateMap()
 				Cell(x, y + 1),
 			};
 
-			// —×Úƒm[ƒh‚Ì’Ç‰Á
+			// éš£æ¥ãƒãƒ¼ãƒ‰ã®è¿½åŠ 
 			for (const Cell& cell : adjacent_cells)
 			{
 				if (IsCellWithinTheRange(cell.X, cell.Y) == true &&
@@ -142,7 +142,7 @@ void CreateMap()
 	}
 }
 
-// ƒRƒXƒg‰Šú‰»
+// ã‚³ã‚¹ãƒˆåˆæœŸåŒ–
 void InitCost(int heuristic_cost, int total_cost)
 {
 	for (int y = 0; y < MapHeight; y++)
@@ -155,7 +155,7 @@ void InitCost(int heuristic_cost, int total_cost)
 	}
 }
 
-// ƒqƒ…[ƒŠƒXƒeƒBƒbƒNƒRƒXƒgŒvZ(ƒm[ƒh‚ÆƒS[ƒ‹‚Ü‚Å‚Ì‹——£‚ğ•Ô‚µ‚Ä‚¢‚é)
+// ãƒ’ãƒ¥ãƒ¼ãƒªã‚¹ãƒ†ã‚£ãƒƒã‚¯ã‚³ã‚¹ãƒˆè¨ˆç®—(ãƒãƒ¼ãƒ‰ã¨ã‚´ãƒ¼ãƒ«ã¾ã§ã®è·é›¢ã‚’è¿”ã—ã¦ã„ã‚‹)
 float CalculateHeuristic(const Node* node, const Node* Goal)
 {
 	float x = fabsf(Goal->Position.X - node->Position.X);
@@ -164,7 +164,7 @@ float CalculateHeuristic(const Node* node, const Node* Goal)
 	return sqrtf(x * x + y * y);
 }
 
-// ƒZƒ‹”äŠr
+// ã‚»ãƒ«æ¯”è¼ƒ
 bool IsEqualCell(const Cell& a, const Cell& b)
 {
 	if (a.X == b.X &&
@@ -178,13 +178,13 @@ bool IsEqualCell(const Cell& a, const Cell& b)
 
 EraseResult EraseNode(list<Node*>& list, Node* new_node, float new_cost)
 {
-	// ƒNƒ[ƒYƒŠƒXƒgƒ`ƒFƒbƒN
+	// ã‚¯ãƒ­ãƒ¼ã‚ºãƒªã‚¹ãƒˆãƒã‚§ãƒƒã‚¯
 	for (auto itr = list.begin(); itr != list.end(); itr++)
 	{
-		// ƒm[ƒh‚Æ“¯‚¶ƒZƒ‹‚ª‚ ‚é‚©’²‚×‚é
+		// ãƒãƒ¼ãƒ‰ã¨åŒã˜ã‚»ãƒ«ãŒã‚ã‚‹ã‹èª¿ã¹ã‚‹
 		if (IsEqualCell(new_node->Position, (*itr)->Position) == true)
 		{
-			// ƒRƒXƒg‚Ì”äŠr
+			// ã‚³ã‚¹ãƒˆã®æ¯”è¼ƒ
 			if (new_cost < (*itr)->TotalCost)
 			{
 				list.erase(itr);
@@ -200,7 +200,7 @@ EraseResult EraseNode(list<Node*>& list, Node* new_node, float new_cost)
 	return EraseResult::NotFound;
 }
 
-// ƒI[ƒvƒ“ƒŠƒXƒg‚É’Ç‰Á
+// ã‚ªãƒ¼ãƒ—ãƒ³ãƒªã‚¹ãƒˆã«è¿½åŠ 
 bool AddAdjacentNode(list<Node*>& open_list, list<Node*>& close_list, Node* adjacent_node, float cost)
 {
 	bool can_update = true;
@@ -213,7 +213,7 @@ bool AddAdjacentNode(list<Node*>& open_list, list<Node*>& close_list, Node* adja
 
 	for (list<Node*>& list : node_list)
 	{
-		// ƒŠƒXƒg‚É“¯‚¶ƒm[ƒh‚ª‚ ‚Á‚ÄƒŠƒXƒg‚Ì•û‚ÌƒRƒXƒg‚ª‚‚¢‚È‚çíœ
+		// ãƒªã‚¹ãƒˆã«åŒã˜ãƒãƒ¼ãƒ‰ãŒã‚ã£ã¦ãƒªã‚¹ãƒˆã®æ–¹ã®ã‚³ã‚¹ãƒˆãŒé«˜ã„ãªã‚‰å‰Šé™¤
 		if (EraseNode(list, adjacent_node, cost) == EraseResult::CouldntErased)
 		{
 			can_update = false;
@@ -237,58 +237,58 @@ void AStar(Cell start, Cell goal)
 	//const Node* start_node = &Map[start.Y][start.X];
 	const Node* goal_node = &Map[goal.Y][goal.X];
 
-	// XV‚µ‚½ƒm[ƒhˆÊ’u•Û‘¶—p
+	// æ›´æ–°ã—ãŸãƒãƒ¼ãƒ‰ä½ç½®ä¿å­˜ç”¨
 	Cell last_update_cells[MapHeight][MapWidth];
 
-	// ƒOƒ‰ƒt‚Ì‰Šú‰»
+	// ã‚°ãƒ©ãƒ•ã®åˆæœŸåŒ–
 	InitCost(Infinity, 0);
 
-	// ƒXƒ^[ƒgƒm[ƒh‚Ìw’è
+	// ã‚¹ã‚¿ãƒ¼ãƒˆãƒãƒ¼ãƒ‰ã®æŒ‡å®š
 	open_list.push_back(&Map[start.Y][start.X]);
 
-	// Œo˜H’Tõ‰ñ”
+	// çµŒè·¯æ¢ç´¢å›æ•°
 	int count = 0;
 
-	// ƒI[ƒvƒ“ƒŠƒXƒg‚ª‚È‚­‚È‚é‚Ü‚Å‰ñ‚·
+	// ã‚ªãƒ¼ãƒ—ãƒ³ãƒªã‚¹ãƒˆãŒãªããªã‚‹ã¾ã§å›ã™
 	while (open_list.empty() == false)
 	{
 		count++;
 
 		Node* search_node = (*open_list.begin());
-		// ’TõƒŠƒXƒg‚©‚çœŠO
+		// æ¢ç´¢ãƒªã‚¹ãƒˆã‹ã‚‰é™¤å¤–
 		open_list.erase(open_list.begin());
 
-		// ƒS[ƒ‹‚É“’B‚µ‚½‚çI‚í‚è
+		// ã‚´ãƒ¼ãƒ«ã«åˆ°é”ã—ãŸã‚‰çµ‚ã‚ã‚Š
 		if (IsEqualCell(search_node->Position, goal) == true)
 		{
-			// ƒNƒ[ƒYƒŠƒXƒg‚ÉÅŒã‚Ìƒm[ƒh‚ğ’Ç‰Á‚·‚é
+			// ã‚¯ãƒ­ãƒ¼ã‚ºãƒªã‚¹ãƒˆã«æœ€å¾Œã®ãƒãƒ¼ãƒ‰ã‚’è¿½åŠ ã™ã‚‹
 			close_list.push_back(search_node);
 			break;
 		}
 
 		for (Node* adjacent_node : search_node->AdjacentNodes)
 		{
-			// ŒvZ‚ğs‚Á‚Ä‚¢‚È‚©‚Á‚½ê‡‚¾‚¯ŒvZ
+			// è¨ˆç®—ã‚’è¡Œã£ã¦ã„ãªã‹ã£ãŸå ´åˆã ã‘è¨ˆç®—
 			if (adjacent_node->HeuristicCost == Infinity)
 			{
-				// ƒqƒ…[ƒŠƒXƒeƒBƒNƒXƒRƒXƒgŒvZ
+				// ãƒ’ãƒ¥ãƒ¼ãƒªã‚¹ãƒ†ã‚£ã‚¯ã‚¹ã‚³ã‚¹ãƒˆè¨ˆç®—
 				adjacent_node->HeuristicCost = CalculateHeuristic(adjacent_node, goal_node);
 			}
 
-			// ƒm[ƒhŠÔƒRƒXƒg
+			// ãƒãƒ¼ãƒ‰é–“ã‚³ã‚¹ãƒˆ
 			float edge_cost = CostTable[adjacent_node->Position.Y][adjacent_node->Position.X];
-			// æ“¾ƒm[ƒh‚Ìƒg[ƒ^ƒ‹ƒRƒXƒg
+			// å–å¾—ãƒãƒ¼ãƒ‰ã®ãƒˆãƒ¼ã‚¿ãƒ«ã‚³ã‚¹ãƒˆ
 			float node_cost = search_node->TotalCost;
 			/*
-				ƒg[ƒ^ƒ‹ƒRƒXƒgZo
-					ƒm[ƒhŠÔƒRƒXƒg + ƒqƒ…[ƒŠƒXƒeƒBƒbƒNƒRƒXƒg + æ“¾ƒm[ƒh‚Ìƒg[ƒ^ƒ‹ƒRƒXƒg
+				ãƒˆãƒ¼ã‚¿ãƒ«ã‚³ã‚¹ãƒˆç®—å‡º
+					ãƒãƒ¼ãƒ‰é–“ã‚³ã‚¹ãƒˆ + ãƒ’ãƒ¥ãƒ¼ãƒªã‚¹ãƒ†ã‚£ãƒƒã‚¯ã‚³ã‚¹ãƒˆ + å–å¾—ãƒãƒ¼ãƒ‰ã®ãƒˆãƒ¼ã‚¿ãƒ«ã‚³ã‚¹ãƒˆ
 			*/
 			float total_cost = edge_cost + adjacent_node->HeuristicCost + node_cost;
 
-			// ƒm[ƒh’Ç‰Á
+			// ãƒãƒ¼ãƒ‰è¿½åŠ 
 			if (AddAdjacentNode(open_list, close_list, adjacent_node, total_cost) == true)
 			{
-				// ƒg[ƒ^ƒ‹ƒRƒXƒg‚ğXV
+				// ãƒˆãƒ¼ã‚¿ãƒ«ã‚³ã‚¹ãƒˆã‚’æ›´æ–°
 				adjacent_node->TotalCost = total_cost;
 
 				if (adjacent_node->Position.Y == 0 && adjacent_node->Position.X == 2)
@@ -297,17 +297,17 @@ void AStar(Cell start, Cell goal)
 					xx = 100;
 				}
 
-				// Œo˜H‚ğXV‚µ‚½ƒZƒ‹‚ğ•Û‘¶
+				// çµŒè·¯ã‚’æ›´æ–°ã—ãŸã‚»ãƒ«ã‚’ä¿å­˜
 				last_update_cells[adjacent_node->Position.Y][adjacent_node->Position.X] = search_node->Position;
 			}
 		}
 
 		bool is_add_close = true;
 
-		// ƒNƒ[ƒYƒŠƒXƒgƒ`ƒFƒbƒN
+		// ã‚¯ãƒ­ãƒ¼ã‚ºãƒªã‚¹ãƒˆãƒã‚§ãƒƒã‚¯
 		for (auto itr = close_list.begin(); itr != close_list.end(); itr++)
 		{
-			// ƒm[ƒh‚Æ“¯‚¶ƒZƒ‹‚ª‚ ‚é‚©’²‚×‚é
+			// ãƒãƒ¼ãƒ‰ã¨åŒã˜ã‚»ãƒ«ãŒã‚ã‚‹ã‹èª¿ã¹ã‚‹
 			if (IsEqualCell(search_node->Position, (*itr)->Position) == true)
 			{
 				is_add_close = false;
@@ -315,33 +315,33 @@ void AStar(Cell start, Cell goal)
 			}
 		}
 
-		// “¯‚¶ƒm[ƒh‚ª–³‚©‚Á‚½‚Ì‚Å’Ç‰Á
+		// åŒã˜ãƒãƒ¼ãƒ‰ãŒç„¡ã‹ã£ãŸã®ã§è¿½åŠ 
 		if (is_add_close == true)
 		{
-			// ‚±‚Ìƒm[ƒh‚Ì’TõI—¹
+			// ã“ã®ãƒãƒ¼ãƒ‰ã®æ¢ç´¢çµ‚äº†
 			close_list.push_back(search_node);
 		}
 
-		// ¸‡ƒ\[ƒg
+		// æ˜‡é †ã‚½ãƒ¼ãƒˆ
 		open_list.sort(Less);
 	}
 
-	// Œo˜H•œŒ³
+	// çµŒè·¯å¾©å…ƒ
 	list<Cell> route_list;
 
-	// ƒS[ƒ‹ƒZƒ‹‚©‚ç•œŒ³‚·‚é
+	// ã‚´ãƒ¼ãƒ«ã‚»ãƒ«ã‹ã‚‰å¾©å…ƒã™ã‚‹
 	route_list.push_back(goal);
 	while (route_list.empty() == false)
 	{
 		Cell route = route_list.front();
 
-		// ƒXƒ^[ƒgƒZƒ‹‚È‚çI—¹
+		// ã‚¹ã‚¿ãƒ¼ãƒˆã‚»ãƒ«ãªã‚‰çµ‚äº†
 		if (IsEqualCell(route, start) == true)
 		{
-			// •œŒ³‚µ‚½Œo˜H‚ğ•\¦
+			// å¾©å…ƒã—ãŸçµŒè·¯ã‚’è¡¨ç¤º
 			for (Cell& cell : route_list)
 			{
-				// cell.X cell.Y ‚Ì’l‚Å‚Ç‚±‚Éi‚Ş‚©‚ğ‚µ‚Ä‚¢‚é
+				// cell.X cell.Y ã®å€¤ã§ã©ã“ã«é€²ã‚€ã‹ã‚’ã—ã¦ã„ã‚‹
 				printf("x = %d y = %d\n", cell.X, cell.Y);
 			}
 			break;
@@ -350,18 +350,18 @@ void AStar(Cell start, Cell goal)
 		{
 			if (IsCellWithinTheRange(route.X, route.Y) == true)
 			{
-				// ’Ç‰Á
+				// è¿½åŠ 
 				route_list.push_front(last_update_cells[route.Y][route.X]);
 			}
 			else
 			{
-				printf("Œo˜H‚ÍŒ©‚Â‚©‚ç‚È‚©‚Á‚½\n");
+				printf("çµŒè·¯ã¯è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸ\n");
 				break;
 			}
 		}
 	}
 
-	printf("’Tõ‰ñ” = %d\n", count);
+	printf("æ¢ç´¢å›æ•° = %d\n", count);
 }
 
 
